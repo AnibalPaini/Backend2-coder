@@ -2,7 +2,7 @@ import { Router } from "express";
 import passport from "passport";
 import userModel from "../model/user.model.js";
 import Cart from "../model/carts.model.js";
-import { isValidPassword, generateToken, passportCall } from "../utils.js";
+import { isValidPassword, generateToken, passportCall, authorization } from "../utils.js";
 
 const sessiosRouter = Router();
 
@@ -88,6 +88,7 @@ sessiosRouter.get("/current", passportCall("jwt"), async (req, res) => {
 //Delete user
 sessiosRouter.delete(
   "/deleteUser/:id",
+  passportCall('jwt'),
   authorization("admin"),
   async (req, res) => {
     try {
@@ -108,6 +109,7 @@ sessiosRouter.delete(
 //Put user
 sessiosRouter.put(
   "/updateUser/:id",
+  passportCall('jwt'),
   authorization("admin"),
   async (req, res) => {
     try {
