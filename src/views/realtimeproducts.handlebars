@@ -1,0 +1,29 @@
+<div style="display: flex;">
+  <div>
+    <h1>Home</h1>
+    <h2>Productos</h2>
+    <ul id="productsList">
+      {{#each products}} <!-- Itera sobre los productos pasados desde el servidor -->
+        <li>
+          <p>{{this.title}}</p>
+          <p>{{this.description}}</p>
+          <p>${{this.price}}</p>
+          <button class="delete-btn" data-id="{{this._id}}">Eliminar producto</button>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+  <div>
+    <h1>Real Time Products</h1>
+    <form action="" id="formNewProduct">
+        <input type="text" class="inputsForm" name="title" placeholder="Titulo">
+        <input type="text" class="inputsForm"  name="description" placeholder="Description">
+        <input type="number"  class="inputsForm" name="price" placeholder="Precio">
+        <input type="number"  class="inputsForm" name="stock" placeholder="Stock">
+        <input type="text" class="inputsForm"  name="category" placeholder="Categoria">
+        <button type="submit">Enviar</button>
+    </form>
+  </div>
+</div>
+<script src="/js/addProduct.js"></script>
+
