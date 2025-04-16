@@ -50,7 +50,7 @@ export const cookieExtractor = req => {
     if (req && req.cookies) {
         console.log("Cookies presentes: ");
         console.log(req.cookies);
-        token = req.cookies['jwtCookie'];
+        token = req.cookies['jwtCookieToken'];
 
 
         console.log("Token obtenido desde Cookie:");
