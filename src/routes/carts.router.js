@@ -1,45 +1,17 @@
 import express from "express";
 import Cart from "../model/carts.model.js"
+import {
+    postCartController,
+    getCartIdController
+} from "../controller/cart.controller.js"
 
 const cartRouter=express.Router();
 
 //Post de carrito
-cartRouter.post("/", async (req, res) => {
-    try {
-        const { products = [] } = req.body; 
-
-        if (!Array.isArray(products)) {
-            return res.status(400).send({ message: "El formato de productos es incorrecto" });
-        }
-
-        const newCart = new Cart({ products });
-
-        await newCart.save();
-
-        res.status(201).send({ status: "success", payload: newCart });
-    } catch (error) {
-        console.error("Error al crear el carrito:", error);
-        res.status(500).send({ message: "Error interno del servidor" });
-    }
-});
+cartRouter.post("/", postCartController);
 
 //Get carrito por id
-cartRouter.get("/:cid", async (req, res) => {
-    try {
-        const { cid } = req.params;
-
-        const cart = await Cart.findById(cid).populate("products.product");
-
-        if (!cart) {
-            return res.status(404).send({ message: "Carrito no encontrado" });
-        }
-
-        res.status(200).send({ status: "success", payload: cart });
-    } catch (error) {
-        console.error("Error al obtener el carrito:", error);
-        res.status(500).send({ status: "error", message: "Error interno del servidor" });
-    }
-});
+cartRouter.get("/:cid", getCartIdController);
 
 //Put carrito por id, ingresa productos
 cartRouter.put("/:cid", async (req, res) => {
