@@ -1,12 +1,14 @@
-<div>
-    {{#if user}}
-        <h1>Perfil</h1>
-        <p> {{user.name}} </p>
-        <p> {{user.email}} </p>
-        <p> {{user.age}} </p>
-    {{else}}
-        <h1>Inicia sesion!</h1>
-        <a href="/users/login">Login</a>
-    {{/if}}
-    <a href="/">Ver productos:</a>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 400px;">
+        {{#if user}}
+            <h1 class="text-center mb-4">Perfil</h1>
+            <p><strong>Nombre:</strong> {{user.name}}</p>
+            <p><strong>Email:</strong> {{user.email}}</p>
+            <p><strong>Edad:</strong> {{user.age}}</p>
+        {{else}}
+            <h1 class="text-center mb-4">¡Inicia sesión!</h1>
+            <a href="/users/login" class="btn btn-primary btn-block">Login</a>
+        {{/if}}
+        <a href="/" class="btn btn-outline-secondary btn-block mt-3">Ver productos</a>
+    </div>
 </div>

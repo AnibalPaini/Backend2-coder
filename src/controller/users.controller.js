@@ -1,19 +1,10 @@
-import {
-  isValidPassword,
-  generateToken,
-  cookieExtractor,
-  authorization,
-} from "../utils.js";
+import { isValidPassword, generateToken, generateHash } from "../utils.js";
 
-import UserService from "../services/user.service.js";
-import CartService from "../services/cart.service.js";
-
-const userService = new UserService();
-const cartService = new CartService();
+import { userRepositoryService, cartRepositoryService } from "../services/service.js";
 
 export const getUsuariosController = async (req, res) => {
   try {
-    let usuarios = await userService.obtenerUsuario();
+    let usuarios = await userRepositoryService.obtenerUsuario();
     if (!usuarios) {
       console.log("No se encontraron usuarios");
       res.status(400).send("No se encontraron usuarios");
@@ -28,18 +19,40 @@ export const getUsuariosController = async (req, res) => {
 
 export const registerUsuarioController = async (req, res) => {
   try {
-    console.log("Usuario registrado!");
-    res.status(201).send({ status: "success", message: "Usuario creado" });
+    const { first_name, last_name, email, age, password, role } = req.body;
+  
+    // Validar campos obligatorios
+    if (!first_name || !last_name || !email || !age || !password)
+      return res.status(400).send("Todos los campos son necesarios!");
+  
+    // Verificar si el usuario ya existe
+    const exist = await userRepositoryService.buscarUsuario(email);
+    if (exist) {
+      return res.status(409).send({ error: "Usuario ya existente" });
+    }
+  
+    // Crear nuevo usuario
+    const usuario = await userRepositoryService.guardarUsuario({
+      first_name,
+      last_name,
+      email,
+      age,
+      password: generateHash(password),
+      role: role || "user", 
+    });
+  
+    res.status(201).send({ status: "Success", payload: usuario });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).send({ error: "Error al crear usuario!" });
   }
 };
 
+
 export const deleteUsuarioController = async (req, res) => {
   try {
     let uid = req.params.id;
-    let usuarioEliminar = await userService.eliminarUsuario(uid);
+    let usuarioEliminar = await userRepositoryService.eliminarUsuario(uid);
     if (!usuarioEliminar) {
       return res.status(404).send({ error: "No se pudo eliminar el usuario!" });
     }
@@ -54,7 +67,10 @@ export const putUsuariosController = async (req, res) => {
   try {
     let uid = req.params.id;
     let usuarioActualizado = req.body;
-    let usuario = await userService.actualizarUsuario(uid, usuarioActualizado);
+    let usuario = await userRepositoryService.actualizarUsuario(
+      uid,
+      usuarioActualizado
+    );
     if (!usuario) {
       return res
         .status(404)
@@ -71,7 +87,7 @@ export const loginController = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await userService.buscarUsuario(email);
+    const user = await userRepositoryService.buscarUsuario(email);
     if (!user)
       return res.status(401).send({ error: "No se encontro el usuario!" });
 
@@ -80,10 +96,13 @@ export const loginController = async (req, res) => {
     }
 
     // Buscar el carrito asociado al usuario
-    const userCart = await cartService.buscarCarrito(user.cart);
+    let userCart = await cartRepositoryService.buscarCarrito(user.cart);
 
     if (!userCart) {
-      return res.status(404).send({ error: "Carrito no encontrado!" });
+      let nuevoCarrito = await cartRepositoryService.nuevoCarrito([]);
+      user.cart = nuevoCarrito._id;
+      await userRepositoryService.saveUsuario(user);
+      userCart = nuevoCarrito;
     }
 
     const tokenUser = {
@@ -109,7 +128,9 @@ export const loginController = async (req, res) => {
       httpOnly: false,
     });
 
-    res.status(200).send({ status: "success", message: "Usuario logeado!", cart: userCart });
+    res
+      .status(200)
+      .send({ status: "success", message: "Usuario logeado!", cart: userCart });
   } catch (error) {
     console.log(error);
     res.status(401).send({ status: "error", error: "Error en el logeo" });

@@ -69,3 +69,17 @@ export const authorization=(role)=>{
         next();
     }
 }
+
+export const checkIfLoggedIn = (req, res, next) => {
+    if (req.cookies && req.cookies.jwtCookieToken) {
+      passport.authenticate("jwt", { session: false }, (error, user) => {
+        if (error || !user) {
+          return next();
+        }
+        req.user = user;  
+        next();
+      })(req, res, next);
+    } else {
+      return next();  
+    }
+  };

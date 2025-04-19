@@ -1,4 +1,4 @@
-import userModel from "../model/user.model.js";
+import userModel from "../../db/models/user.model.js";
 
 export default class UserService{
     constructor(){}
@@ -26,5 +26,9 @@ export default class UserService{
 
     buscarUsuario= async(email)=>{
         return await userModel.findOne({email:email}) || null;
+    }
+
+    saveUsuario=async(user)=>{
+        return await user.save()
     }
 }

@@ -1,5 +1,5 @@
 //Obtener carrito de la cookie
-function getCartIdFromCookies() {
+export default function getCartIdFromCookies() {
     const cookies = document.cookie.split('; ');
     for (const cookie of cookies) {
         const [name, value] = cookie.split('=');
@@ -48,3 +48,12 @@ addCartButtons.forEach(button => {
         }
     });
 });
+
+const cartButton= document.querySelector(".cartButton")
+cartButton.addEventListener('click' , ()=>{
+    const cid=getCartIdFromCookies()
+    console.log(cid);
+    window.location.replace(`/carts/${cid}`)
+})
+
+  

@@ -1,13 +1,5 @@
 import { Router } from "express";
-import passport from "passport";
-import userModel from "../model/user.model.js";
-import Cart from "../model/carts.model.js";
-import {
-  isValidPassword,
-  generateToken,
-  passportCall,
-  authorization,
-} from "../utils.js";
+import { passportCall, authorization } from "../utils.js";
 
 import {
   getUsuariosController,
@@ -29,11 +21,7 @@ sessiosRouter.get(
 );
 
 sessiosRouter.post(
-  "/register",
-  passport.authenticate("register", {
-    failureRedirect: "/api/sessions/fail-register",
-  }),
-  registerUsuarioController
+  "/register", registerUsuarioController
 );
 
 sessiosRouter.get("/fail-register", (req, res) => {

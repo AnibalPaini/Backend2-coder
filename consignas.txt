@@ -1,20 +1,20 @@
 
 Objetivos específicos
-    -Aplicar una arquitectura profesional para nuestro servidor
-    -Aplicar prácticas como patrones de diseño, mailing, variables de entorno. etc.
+    -Aplicar una arquitectura profesional para nuestro servidor✅
+    -Aplicar prácticas como patrones de diseño, mailing, variables de entorno. etc.✅
 
 Se debe entregar
-    -Modificar nuestra capa de persistencia para aplicar los conceptos de DAO y DTO.
+    -Modificar nuestra capa de persistencia para aplicar los conceptos de DAO y DTO.✅
 
-    -Implementar el patrón Repository para trabajar con el DAO en la lógica de negocio.
+    -Implementar el patrón Repository para trabajar con el DAO en la lógica de negocio.✅
 
-    -Modificar la ruta  /current Para evitar enviar información sensible, enviar un DTO del usuario sólo con la información necesaria.
+    -Modificar la ruta  /current Para evitar enviar información sensible, enviar un DTO del usuario sólo con la información necesaria.✅
 
     -Realizar un middleware que pueda trabajar en conjunto con la estrategia “current” para hacer un sistema de autorización y delimitar el acceso a dichos endpoints:
-        ♦Sólo el administrador puede crear, actualizar y eliminar productos.
-        ♦Sólo el usuario puede agregar productos a su carrito.
+        ♦Sólo el administrador puede crear, actualizar y eliminar productos.✅
+        ♦Sólo el usuario puede agregar productos a su carrito.✅
 
-    -Crear un modelo Ticket el cual contará con todas las formalizaciones de la compra. Éste contará con los campos
+    -Crear un modelo Ticket el cual contará con todas las formalizaciones de la compra. Éste contará con los campos✅
         ♦Id (autogenerado por mongo)
         ♦code: String debe autogenerarse y ser único
         ♦purchase_datetime: Deberá guardar la fecha y hora exacta en la cual se formalizó la compra (básicamente es un created_at)

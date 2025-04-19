@@ -1,0 +1,30 @@
+<div class="container mt-5">
+  <h2 class="mb-4">¡Gracias por tu compra! 🛒</h2>
+
+  {{#if ticket}}
+    <div class="card p-3 shadow-sm mb-4">
+      <h5 class="mb-2">Detalles del ticket:</h5>
+      <p><strong>Código:</strong> {{ticket.code}}</p>
+      <p><strong>Comprador:</strong> {{ticket.purchaser}}</p>
+      <p><strong>Fecha:</strong> {{ticket.purchase_datetime}}</p>
+      <p><strong>Total:</strong> ${{ticket.amount}}</p>
+    </div>
+  {{/if}}
+
+  {{#if productosNoProcesados.length}}
+    <div class="alert alert-warning">
+      <h6>Los siguientes productos no pudieron ser procesados por falta de stock:</h6>
+      <ul>
+        {{#each productosNoProcesados}}
+          <li>ID del producto: {{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+  {{else}}
+    <div class="alert alert-success">
+      <p>Todos tus productos fueron procesados correctamente ✅</p>
+    </div>
+  {{/if}}
+
+  <a href="/" class="btn btn-primary mt-3">Volver al inicio</a>
+</div>
