@@ -17,7 +17,8 @@ const ticketSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  purchaser: { type: String }
+  purchaser: { type: String },
+  productosNoProcesados: [String]
 });
 
 const Ticket = mongoose.model("Ticket", ticketSchema);

@@ -1,14 +1,16 @@
-import { productRepositoryService, cartRepositoryService } from "../services/service.js";
-
-
+import {
+  productRepositoryService,
+  cartRepositoryService,
+  ticketRepositoryService,
+} from "../services/service.js";
 
 export const viewProductsController = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = 9;
     const products = await productRepositoryService.viewsProductos(page, limit);
-    const isAdmin = req.user && req.user.role === 'admin';
-    res.render("home", {...products, user: req.user, isAdmin});
+    const isAdmin = req.user && req.user.role === "admin";
+    res.render("home", { ...products, user: req.user, isAdmin });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: error.message });
@@ -19,7 +21,7 @@ export const viewProductIdController = async (req, res) => {
   try {
     const { pid } = req.params;
     const product = await productRepositoryService.obtenerProductoID(pid);
-    res.render("productDetail", { product});
+    res.render("productDetail", { product });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: error.message });
@@ -43,7 +45,6 @@ export const viewCartController = async (req, res) => {
   }
 };
 
-
 export const viewRealtimeProducts = async (req, res) => {
   try {
     const products = await productRepositoryService.obtenerProductos();
@@ -54,12 +55,26 @@ export const viewRealtimeProducts = async (req, res) => {
   }
 };
 
-export const viewTicketController=async(req,res)=>{
+export const viewTicketController = async (req, res) => {
   try {
-    
-  } catch (error) {
-    
-  }
-}
+    const { code } = req.params;
+    const ticket = await ticketRepositoryService.getTicketByCode(code);
 
+    if (!ticket) {
+      return res
+        .status(404)
+        .render("error", { message: "Ticket no encontrado" });
+    }
 
+    const productosNoProcesadosIds = ticket.productosNoProcesados || [];
+
+    const productosNoProcesados = await Promise.all(
+      productosNoProcesadosIds.map(async (id) => {
+        const producto = await productRepositoryService.obtenerProductoID(id);
+        return producto ? producto : `Producto (${id}) no encontrado`;
+      })
+    );
+
+    res.render("ticket", { ticket, productosNoProcesados });
+  } catch (error) {}
+};

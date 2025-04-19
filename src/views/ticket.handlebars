@@ -12,14 +12,12 @@
   {{/if}}
 
   {{#if productosNoProcesados.length}}
-    <div class="alert alert-warning">
-      <h6>Los siguientes productos no pudieron ser procesados por falta de stock:</h6>
-      <ul>
-        {{#each productosNoProcesados}}
-          <li>ID del producto: {{this}}</li>
-        {{/each}}
-      </ul>
-    </div>
+    <h3>Productos no procesados</h3>
+    <ul>
+      {{#each productosNoProcesados}}
+        <li>{{this.title}} - {{this.description}} - ${{this.price}}</li>
+      {{/each}}
+    </ul>
   {{else}}
     <div class="alert alert-success">
       <p>Todos tus productos fueron procesados correctamente ✅</p>

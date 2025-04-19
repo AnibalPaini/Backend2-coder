@@ -5,7 +5,11 @@ export default class ProductRepository {
       this.#dao = dao;
     }
 
-    async createTicket({amount, purchaser}){
-        return await this.#dao.createTicket({amount, purchaser})
+    async createTicket(ticketData){
+        return await this.#dao.createTicket(ticketData)
+    }
+
+    async getTicketByCode(code){
+      return await this.#dao.getTicketByCode(code)
     }
 }

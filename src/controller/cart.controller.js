@@ -1,5 +1,9 @@
-import { cartRepositoryService, productRepositoryService, ticketRepositoryService } from "../services/service.js"
-import crypto from 'crypto';
+import {
+  cartRepositoryService,
+  productRepositoryService,
+  ticketRepositoryService,
+} from "../services/service.js";
+import crypto from "crypto";
 
 export const postCartController = async (req, res) => {
   try {
@@ -169,41 +173,46 @@ export const finalizarCompraController = async (req, res) => {
 
     // Verificación de stock y descuento
     for (const item of cart.products) {
-      const product = await productRepositoryService.obtenerProductoIdNoLean(item.product._id);
+      const product = await productRepositoryService.obtenerProductoIdNoLean(
+        item.product._id
+      ); 
 
       if (product.stock >= item.quantity) {
         product.stock -= item.quantity;
         await productRepositoryService.guardarProducto(product);
         total += product.price * item.quantity;
       } else {
+        console.log(`Producto no procesado: ${item.product._id}`); 
         productosNoProcesados.push(item.product._id.toString());
       }
     }
-
     // Limpiar el carrito de productos procesados
-    cart.products = cart.products.filter(item =>
+    cart.products = cart.products.filter((item) =>
       productosNoProcesados.includes(item.product._id.toString())
     );
     await cartRepositoryService.guardarCarrito(cart);
-    
+
+    if (total===0){
+      return res.status(400).send({error:"Productos ingresados no estan en stock!"})
+    }
+
     // Crear el ticket
-    let ticketCode=crypto.randomUUID();
     const ticketData = {
       amount: total,
-      purchaser: req.user.email 
+      purchaser: req.user.email,
+      productosNoProcesados: productosNoProcesados,
     };
-    console.log("Ticket Code" + ticketData.code)
-    console.log(ticketData)
+    console.log("Ticket Code" + ticketData.code);
+    console.log(ticketData);
     const ticket = await ticketRepositoryService.createTicket(ticketData);
 
-    
-    res.render("ticket", {
-      ticket,
-      productosNoProcesados
+    res.status(200).json({
+      status: "Compra procesada",
+      ticket: ticket,
+      productosNoProcesados: productosNoProcesados,
     });
   } catch (error) {
     console.error("Error al finalizar la compra:", error);
     res.status(500).send({ error: "Error al finalizar la compra" });
   }
 };
-

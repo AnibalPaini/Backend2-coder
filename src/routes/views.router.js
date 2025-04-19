@@ -18,6 +18,7 @@ viewsRouter.get("/carts/:cid",passportCall("jwt"), viewCartController);
 
 viewsRouter.get("/realtimeproducts",passportCall("jwt"), authorization("admin"),  viewRealtimeProducts);
 
-viewsRouter.get("/ticket/:tid",passportCall("jwt"), viewTicketController);
+viewsRouter.get("/ticket/:code",passportCall("jwt"), viewTicketController);
+
 
 export default viewsRouter;
