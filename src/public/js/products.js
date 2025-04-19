@@ -50,10 +50,12 @@ addCartButtons.forEach(button => {
 });
 
 const cartButton= document.querySelector(".cartButton")
-cartButton.addEventListener('click' , ()=>{
-    const cid=getCartIdFromCookies()
-    console.log(cid);
-    window.location.replace(`/carts/${cid}`)
-})
+if (cartButton) {
+    cartButton.addEventListener('click' , ()=>{
+        const cid=getCartIdFromCookies()
+        console.log(cid);
+        window.location.replace(`/carts/${cid}`)
+    })   
+}
 
   
