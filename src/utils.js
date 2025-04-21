@@ -3,6 +3,9 @@ import { dirname } from 'path';
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 import passport from "passport";
+import dotenv from "dotenv"
+
+dotenv.config({path:"./config/.env.development"})
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -12,13 +15,13 @@ export default __dirname;
 export const generateHash= (password)=>bcrypt.hashSync(password, bcrypt.genSaltSync(10))
 
 export const isValidPassword=(user, password)=>{
-    console.log(`Datos a validar user-password-db: ${user.password}, password-Cliente: ${password}`);
     return bcrypt.compareSync(password, user.password);
 }
 
-export const PRIVATE_KEY_TOKEN= "ClaveSecretaToken"
+export const PRIVATEKEYTOKEN= process.env.PRIVATE_KEY_TOKEN
+
 export const generateToken=(user)=>{
-    return jwt.sign({user},PRIVATE_KEY_TOKEN, {expiresIn:"24h"} )
+    return jwt.sign({user},process.env.PRIVATE_KEY_TOKEN, {expiresIn:"24h"} )
 }
 
 

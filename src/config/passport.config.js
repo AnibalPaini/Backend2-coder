@@ -1,9 +1,10 @@
 import passport from "passport";
 import jwtStrategy from "passport-jwt";
 import userModel from "../services/db/models/user.model.js";
-import Cart from "../services/db/models/carts.model.js";
-import { cookieExtractor, isValidPassword, PRIVATE_KEY_TOKEN, generateHash } from "../utils.js";
+import dotenv from "dotenv"
+import { cookieExtractor} from "../utils.js";
 
+dotenv.config({path:"./config/.env.development"})
 //Declarar estrategia
 
 
@@ -17,7 +18,7 @@ const initializePassport=()=>{
     passport.use("jwt", new JwtStrategy(
         {
             jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),//extraemos el token de las cookies
-            secretOrKey:PRIVATE_KEY_TOKEN,
+            secretOrKey:process.env.PRIVATE_KEY_TOKEN,
         }, async(jwt_payload, done)=>{
             try {
                 console.log(jwt_payload);

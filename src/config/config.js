@@ -17,9 +17,6 @@ dotenv.config({
     path: enviroment ==="production" ? './src/config/.env.production' : './src/config/.env.development'
 })
 
-console.log("Options: ", program.opts());
-console.log("Mode: ", program.opts().mode);
-
 export default{
     port: process.env.PORT,
     mongoUrl:process.env.MONGO_URL,
