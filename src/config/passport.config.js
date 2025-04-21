@@ -1,10 +1,9 @@
 import passport from "passport";
 import jwtStrategy from "passport-jwt";
 import userModel from "../services/db/models/user.model.js";
-import dotenv from "dotenv"
+import config from "./config.js";
 import { cookieExtractor} from "../utils.js";
 
-dotenv.config({path:"./config/.env.development"})
 //Declarar estrategia
 
 
@@ -18,7 +17,7 @@ const initializePassport=()=>{
     passport.use("jwt", new JwtStrategy(
         {
             jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),//extraemos el token de las cookies
-            secretOrKey:process.env.PRIVATE_KEY_TOKEN,
+            secretOrKey:config.JWT,
         }, async(jwt_payload, done)=>{
             try {
                 console.log(jwt_payload);

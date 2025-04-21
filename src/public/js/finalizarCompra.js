@@ -37,3 +37,14 @@ if (finalizarCompraBtn) {
 }
 
 
+const precioTotal= document.querySelectorAll(".precioTotal")
+const precioProducto= document.querySelectorAll(".precioProducto")
+const cantidadProducto= document.querySelectorAll(".cantidadProducto")
+
+precioProducto.forEach((precio, index) => {
+  let precioNum= parseFloat(precio.textContent)
+  let cantidadNum= parseInt(cantidadProducto[index].textContent)
+  let total= (precioNum * cantidadNum)
+  precioTotal[index].textContent=total.toFixed(2)
+});
+

@@ -38,8 +38,8 @@ app.use(passport.initialize())
 app.use(cookieParser("ClaveSecreta"))
 
 //endpoints
-app.use("/users", usersViewRouter); //<== perfil del usuario, formularios
-app.use("/api/sessions", sessiosRouter);//<-- apis de register y login
+app.use("/users", usersViewRouter); 
+app.use("/api/sessions", sessiosRouter);
 app.use("/", viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);

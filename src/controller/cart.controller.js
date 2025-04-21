@@ -2,8 +2,8 @@ import {
   cartRepositoryService,
   productRepositoryService,
   ticketRepositoryService,
+  sendEmailRepositoryService
 } from "../services/service.js";
-import crypto from "crypto";
 
 export const postCartController = async (req, res) => {
   try {
@@ -169,6 +169,7 @@ export const finalizarCompraController = async (req, res) => {
     if (!cart) return res.status(404).send({ error: "Carrito no encontrado" });
 
     const productosNoProcesados = [];
+    const productosComprados = []
     let total = 0;
 
     // Verificación de stock y descuento
@@ -179,6 +180,12 @@ export const finalizarCompraController = async (req, res) => {
 
       if (product.stock >= item.quantity) {
         product.stock -= item.quantity;
+        productosComprados.push({
+          title: product.title,
+          price: product.price,
+          quantity: item.quantity,
+          subtotal: product.price * item.quantity,
+        });
         await productRepositoryService.guardarProducto(product);
         total += product.price * item.quantity;
       } else {
@@ -202,15 +209,19 @@ export const finalizarCompraController = async (req, res) => {
       purchaser: req.user.email,
       productosNoProcesados: productosNoProcesados,
     };
-    console.log("Ticket Code" + ticketData.code);
-    console.log(ticketData);
     const ticket = await ticketRepositoryService.createTicket(ticketData);
+
+    
+    //Enviamos el email con los datos del ticket
+    ticket.productosComprados = productosComprados;
+    sendEmailRepositoryService.enviarMailTicket(ticket)
 
     res.status(200).json({
       status: "Compra procesada",
       ticket: ticket,
       productosNoProcesados: productosNoProcesados,
     });
+
   } catch (error) {
     console.error("Error al finalizar la compra:", error);
     res.status(500).send({ error: "Error al finalizar la compra" });

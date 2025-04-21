@@ -3,9 +3,8 @@ import { dirname } from 'path';
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 import passport from "passport";
-import dotenv from "dotenv"
+import config from './config/config.js';
 
-dotenv.config({path:"./config/.env.development"})
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,18 +17,13 @@ export const isValidPassword=(user, password)=>{
     return bcrypt.compareSync(password, user.password);
 }
 
-export const PRIVATEKEYTOKEN= process.env.PRIVATE_KEY_TOKEN
-
 export const generateToken=(user)=>{
-    return jwt.sign({user},process.env.PRIVATE_KEY_TOKEN, {expiresIn:"24h"} )
+    return jwt.sign({user},config.JWT, {expiresIn:"24h"} )
 }
 
 
 export const passportCall =(strategy)=>{
     return async(req,res, next)=>{
-        console.log("Entrando en la estrategia: ");
-        console.log(strategy);
-        
         passport.authenticate(strategy, function(error,user,info){
             if(error) return next(error);
             if(!user){
@@ -47,17 +41,8 @@ export const passportCall =(strategy)=>{
 
 export const cookieExtractor = req => {
     let token = null;
-    console.log("CookieExtractor");
-    console.log("req.cookies", req.cookies);
-
     if (req && req.cookies) {
-        console.log("Cookies presentes: ");
-        console.log(req.cookies);
         token = req.cookies['jwtCookieToken'];
-
-
-        console.log("Token obtenido desde Cookie:");
-        console.log(token);
     }
 
     return token;
