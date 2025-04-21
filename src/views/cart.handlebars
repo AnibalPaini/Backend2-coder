@@ -11,6 +11,13 @@
             <span>x</span>
             <p class="cantidadProducto">{{this.quantity}}</p>
           </div>
+
+          <!-- Botones de control -->
+          <div class="mt-2">
+            <button class="btn btn-sm btn-outline-primary btnSumar" data-pid="{{this.product._id}}">+</button>
+            <button class="btn btn-sm btn-outline-secondary btnRestar" data-pid="{{this.product._id}}">-</button>
+            <button class="btn btn-sm btn-outline-danger btnEliminar" data-pid="{{this.product._id}}">🗑️</button>
+          </div>
         </div>
         <span class="badge bg-primary fs-5 d-flex">
           $ <p class="precioTotal"></p>

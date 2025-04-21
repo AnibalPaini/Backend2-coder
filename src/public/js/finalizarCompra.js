@@ -1,10 +1,9 @@
-import getCartIdFromCookies from "./products.js"; 
+import getCartIdFromCookies from "./products.js";
 
 const finalizarCompraBtn = document.getElementById("finalizarCompra");
-
+const cartId = getCartIdFromCookies();
 if (finalizarCompraBtn) {
   finalizarCompraBtn.addEventListener("click", async () => {
-    const cartId = getCartIdFromCookies();
     if (!cartId) {
       alert("No se encontró el carrito.");
       return;
@@ -36,15 +35,34 @@ if (finalizarCompraBtn) {
   });
 }
 
-
-const precioTotal= document.querySelectorAll(".precioTotal")
-const precioProducto= document.querySelectorAll(".precioProducto")
-const cantidadProducto= document.querySelectorAll(".cantidadProducto")
+const precioTotal = document.querySelectorAll(".precioTotal");
+const precioProducto = document.querySelectorAll(".precioProducto");
+const cantidadProducto = document.querySelectorAll(".cantidadProducto");
 
 precioProducto.forEach((precio, index) => {
-  let precioNum= parseFloat(precio.textContent)
-  let cantidadNum= parseInt(cantidadProducto[index].textContent)
-  let total= (precioNum * cantidadNum)
-  precioTotal[index].textContent=total.toFixed(2)
+  let precioNum = parseFloat(precio.textContent);
+  let cantidadNum = parseInt(cantidadProducto[index].textContent);
+  let total = precioNum * cantidadNum;
+  precioTotal[index].textContent = total.toFixed(2);
 });
 
+document.querySelectorAll(".btnSumar").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const pid = btn.dataset.pid;
+    const cantidadElemento = btn
+      .closest(".card-body")
+      .querySelector(".cantidadProducto");
+    const cantidadActual = parseInt(cantidadElemento.textContent);
+    const nuevaCantidad = cantidadActual + 1;
+
+    fetch(`/api/carts/${cartId}/products/${pid}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ quantity: nuevaCantidad }),
+    })
+  });
+});
+document.querySelectorAll(".btnRestar");
+document.querySelectorAll(".btnEliminar");
