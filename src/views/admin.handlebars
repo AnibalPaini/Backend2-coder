@@ -1,12 +1,17 @@
-<div>
-    <h1>Esto es el dashBoard de ADMIN</h1>
-    <p>Hola, {{user.name}}</p>
+ <div class="container py-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h1 class="card-title text-center text-primary">Dashboard de Administrador</h1>
+        <p class="text-center fs-5">Hola, <strong>{{user.name}}</strong></p>
 
-    <p> En este dashBoard, podes hacer un CRUD completo de los Productos</p>
+        <p class="text-center">En este panel podés realizar un <strong>CRUD completo</strong> de los productos.</p>
 
-    <br>
+        <div class="text-center my-4">
+          <a href="/users" class="btn btn-outline-secondary me-2">Ir al perfil</a>
+          <a href="/api/sessions/logout" class="btn btn-danger">Cerrar sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <p> Profile-dashBoard: <a href="/users">Ingresa</a></p>
-    <p> <a href="/api/sessions/logout">Logout</a></p>
-</div>
-<script src="/js/admin.js"></script>
+  <script src="/js/admin.js"></script>

@@ -61,8 +61,37 @@ document.querySelectorAll(".btnSumar").forEach((btn) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ quantity: nuevaCantidad }),
-    })
+    }).then(()=>window.location.reload())
   });
 });
-document.querySelectorAll(".btnRestar");
-document.querySelectorAll(".btnEliminar");
+
+document.querySelectorAll(".btnRestar").forEach((btn)=>{
+  btn.addEventListener("click", ()=>{
+    const pid = btn.dataset.pid;
+    const cantidadElemento=btn
+      .closest(".card-body")
+      .querySelector(".cantidadProducto");
+    const cantidadActual= parseInt(cantidadElemento.textContent)
+    const nuevaCantidad= cantidadActual-1;
+
+    fetch(`/api/carts/${cartId}/products/${pid}`,{
+      method:"PUT",
+      headers:{
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({quantity:nuevaCantidad})
+    }).then(()=>window.location.reload())
+  })
+})
+
+document.querySelectorAll(".btnEliminar").forEach((btn)=>{
+  btn.addEventListener("click", ()=>{
+    const pid= btn.dataset.pid;
+    fetch(`/api/carts/${cartId}/products/${pid}`,{
+      method:"DELETE",
+      headers:{
+        "Content-Type":"application/json"
+      }
+    }).then(()=>window.location.reload())
+  })
+})
